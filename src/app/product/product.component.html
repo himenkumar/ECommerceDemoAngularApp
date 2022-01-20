@@ -1,0 +1,106 @@
+<div class="container">
+    <mat-card class="mat-elevation-z8">
+      <mat-toolbar color="accent" style="box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);">
+        <div align="center" style="color:white;text-align: right;">
+          Ecommerce Demo
+        </div>
+      </mat-toolbar>
+      <br><br>
+      <mat-card-content>
+        <form [formGroup]="productForm" (ngSubmit)="onFormSubmit()">
+          <table>
+            <tr>
+              <td class="tbl1">
+                <mat-form-field class="demo-full-width">
+                  <input formControlName="ProductName" matTooltip="Enter product name" matInput placeholder="ProductName" autocomplete="off">
+                </mat-form-field>
+                <mat-error>
+                  <span *ngIf="!productForm.get('ProductName').value && productForm.get('ProductName').touched"></span>
+                </mat-error>
+              </td>
+              <td class="tbl1">
+                <mat-form-field class="demo-full-width">
+                  <input formControlName="ProductDescription" matTooltip="Enter product description" matInput placeholder="ProductDescription" autocomplete="off">
+                </mat-form-field>
+                <mat-error>
+                  <span *ngIf="!productForm.get('ProductDescription').value && productForm.get('ProductDescription').touched"></span>
+                </mat-error>
+              </td>
+              
+            </tr>
+            <tr>
+              <td class="tbl1">
+                <mat-form-field>
+                  <mat-label>Product Category</mat-label>
+                  <mat-select (selectionChange)="OnProductCategorySelectionChange($event)" formControlName="ProductCategory" matTooltip="Select ProductCategory" autocomplete="off">
+                    <mat-option *ngFor="let ProductCategory of (allProductCategory | async)" [value]="ProductCategory.CategoryId">
+                      {{ProductCategory.CategoryName}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </td>
+             
+            </tr>
+            <tr>
+              <td class="content-center">
+                <button type="submit" mat-raised-button color="accent" matTooltip="Submit" [disabled]="!productForm.valid">Submit</button>
+                <button type="reset" mat-raised-button color="accent" matTooltip="Reset" (click)="resetForm()">Reset</button>
+              </td>
+              <td>
+                <p *ngIf="dataSaved" style="color:rgb(0, 128, 0);font-size:20px;font-weight:bold" Class="success" align="left">
+                  {{massage}}
+                </p>
+              </td>
+              <td></td>
+              <td></td>
+            </tr>
+          </table>
+          <br><br>
+  
+  
+          <div>
+  
+            <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" style="box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);">
+  
+  
+              <ng-container matColumnDef="ProductName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Product Name </th>
+                <td mat-cell *matCellDef="let product"> {{product.ProductName}} </td>
+              </ng-container>
+  
+              <ng-container matColumnDef="ProductDescription">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Product Description </th>
+                <td mat-cell *matCellDef="let product"> {{product.ProductDescription}} </td>
+              </ng-container>
+  
+              <ng-container matColumnDef="ProductCategory">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Product Category </th>
+                <td mat-cell *matCellDef="let product"> {{product.Category.CategoryName}}</td>
+              </ng-container>  
+  
+              <ng-container matColumnDef="Edit">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Edit </th>
+  
+                <td mat-cell *matCellDef="let product">
+  
+                  <button mat-icon-button aria-label="Example icon button with a vertical three dot icon" type="button" mat-raised-button color="accent" matTooltip="Edit" (click)="loadProductToEdit(product.ProductId)"><mat-icon>edit</mat-icon></button>
+  
+                </td>
+              </ng-container>
+  
+              <ng-container matColumnDef="Delete">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Delete </th>
+                <td mat-cell *matCellDef="let product"> <button mat-icon-button aria-label="Example icon button with a delete icon" type="button" mat-raised-button color="accent" matTooltip="Delete" (click)="deleteProduct(product.ProductId)"><mat-icon>delete</mat-icon></button></td>
+              </ng-container>
+  
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+  
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+          </div>
+  
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
